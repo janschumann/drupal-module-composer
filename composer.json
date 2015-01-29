@@ -1,5 +1,5 @@
 {
-    "name": "janschumann/drupal-module-composer",
+    "name": "janschumann/module_composer",
     "description": "Drupal module management",
     "license": "MIT",
     "keywords": [

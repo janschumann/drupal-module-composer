@@ -1,0 +1,48 @@
+{
+    "name": "janschumann/drupal-module-composer",
+    "description": "Drupal module management",
+    "license": "MIT",
+    "keywords": [
+        "framework",
+        "drupal"
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-0": {
+            "Drupal\\ModuleComposer": "src/",
+            "Drupal\\Bridge": "src/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "drupal/drupal",
+                "version": "7.34",
+                "dist": {
+                    "url": "http://ftp.drupal.org/files/projects/drupal-7.34.zip",
+                    "type": "zip"
+                }
+            }
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+
+        "drupal/drupal": "~7.32",
+
+        "drush/drush": "~6.5",
+
+        "janschumann/dic": "~0.1",
+        "janschumann/classloader_composer": "~0.1",
+
+        "symfony/config": "~2.4",
+        "symfony/dependency-injection": "~2.4",
+        "symfony/filesystem": "~2.4",
+        "symfony/http-kernel": "~2.4",
+        "symfony/class-loader": "~2.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.4"
+    }
+}

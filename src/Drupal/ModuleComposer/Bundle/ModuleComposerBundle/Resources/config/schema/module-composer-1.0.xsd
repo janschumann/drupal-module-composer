@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns="http://drupal.org/schema/module-composer/module-composer"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://drupal.org/schema/module-composer/module-composer"
+            elementFormDefault="qualified">
+
+    <xsd:element name="config" type="config" />
+
+    <xsd:complexType name="config">
+        <xsd:sequence>
+            <xsd:element name="coreProjects" type="coreProjects" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="contribProjects" type="contribProjects" minOccurs="1" maxOccurs="1"/>
+            <xsd:element name="customProjects" type="customProjects" minOccurs="2" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="coreProjects">
+        <xsd:sequence>
+            <xsd:element name="project" type="coreProject" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="contribProjects">
+        <xsd:sequence>
+            <xsd:element name="project" type="contribProject" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="customProjects">
+        <xsd:sequence>
+            <xsd:element name="project" type="customProject" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="type" type="xsd:string" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="coreProject">
+        <xsd:sequence>
+            <xsd:element name="module" type="module" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="patch" type="patch" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="version" type="xsd:string" use="optional" />
+    </xsd:complexType>
+
+    <xsd:complexType name="contribProject">
+        <xsd:sequence>
+            <xsd:element name="module" type="module" minOccurs="1" maxOccurs="unbounded"/>
+            <xsd:element name="patch" type="patch" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="version" type="xsd:string" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="customProject">
+        <xsd:sequence>
+            <xsd:element name="module" type="module" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="version" type="xsd:string" use="optional" />
+    </xsd:complexType>
+
+    <xsd:simpleType name="moduleState">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="enabled" />
+            <xsd:enumeration value="disabled" />
+            <xsd:enumeration value="not installed" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="module">
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="state" type="moduleState" use="required" default="enabled" />
+    </xsd:complexType>
+
+    <xsd:complexType name="patch">
+        <xsd:attribute name="name" type="xsd:string" use="required" />
+        <xsd:attribute name="path" type="xsd:string" use="required" />
+    </xsd:complexType>
+</xsd:schema>

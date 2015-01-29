@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="mc.composer.class">Drupal\ModuleComposer\Composer</parameter>
+        <parameter key="mc.config_dumper.class">Drupal\ModuleComposer\ConfigDumper</parameter>
+        <parameter key="mc.drush_bridge.class">Drupal\Bridge\DrushBridge</parameter>
+        <parameter key="mc.project_registry.class">Drupal\ModuleComposer\Project\ProjectRegistry</parameter>
+        <parameter key="mc.project_factory.class">Drupal\ModuleComposer\Project\ProjectFactory</parameter>
+        <parameter key="mc.project_collector.class">Drupal\ModuleComposer\Project\ProjectCollector</parameter>
+        <parameter key="mc.project.class">Drupal\ModuleComposer\Project</parameter>
+        <parameter key="mc.module.class">Drupal\ModuleComposer\Module</parameter>
+    </parameters>
+
+    <services>
+        <service id="mc.project" class="%mc.project.class%" abstract="true" public="false" />
+
+        <service id="mc.module" class="%mc.module.class%" abstract="true" public="false" />
+
+        <service id="mc.installed_projects" class="%mc.project_registry.class%" public="false" />
+
+        <service id="mc.project_factory" class="%mc.project_factory.class%" public="false">
+            <argument type="service" id="mc.drush_bridge" />
+        </service>
+
+        <service id="mc.drush_bridge" class="%mc.drush_bridge.class%" />
+
+        <service id="mc.project_collector" class="%mc.project_collector.class%">
+            <argument type="service" id="mc.drush_bridge" />
+            <argument type="service" id="mc.installed_projects" />
+            <argument type="service" id="mc.project_factory" />
+        </service>
+
+        <service id="mc.composer" class="%mc.composer.class%">
+            <argument type="service" id="mc.installed_projects" />
+        </service>
+
+        <service id="mc.config_dumper" class="%mc.config_dumper.class%">
+            <argument type="service" id="mc.composer" />
+        </service>
+
+        <service id="mc.configured_projects" class="%mc.project_registry.class%" />
+
+    </services>
+
+</container>

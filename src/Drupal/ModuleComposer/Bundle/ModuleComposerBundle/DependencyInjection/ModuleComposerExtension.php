@@ -27,6 +27,10 @@ class ModuleComposerExtension extends Extension
     $configuration = $this->getConfiguration($configs, $container);
     $config = $this->processConfiguration($configuration, $configs);
 
+    foreach ($config['drushExtensions'] as $projectName => $project) {
+      $this->buildProject($container, Project::TYPE_CONTRIB, $projectName, $project);
+    }
+
     foreach ($config['coreProjects']['projects'] as $projectName => $project) {
       $this->buildProject($container, Project::TYPE_CORE, $projectName, $project);
     }

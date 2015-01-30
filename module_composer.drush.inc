@@ -38,12 +38,7 @@ function _module_composer_init() {
   }
 
   if (!class_exists('Drupal\ModuleComposer\Kernel')) {
-    $autoload_file = dirname(__FILE__) . "/vendor/autoload.php";
-    require $autoload_file;
-  }
-
-  if (!class_exists('Drupal\ModuleComposer\Kernel')) {
-    drush_set_error('DRUSH_MODULE_COMPOSER_INIT_ERRPR', "Autoloading is not properly configured. Please require janschumann/drush-module-composer to your composer.json.");
+    drush_set_error('DRUSH_MODULE_COMPOSER_INIT_ERRPR', "Autoloading is not properly configured. Please require janschumann/module_composer to your composer.json.");
   }
 
   // collect installed projects

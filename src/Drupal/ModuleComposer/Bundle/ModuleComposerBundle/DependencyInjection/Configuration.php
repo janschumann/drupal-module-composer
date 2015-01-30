@@ -18,7 +18,16 @@ class Configuration implements ConfigurationInterface {
     $rootNode = $treeBuilder->root('config');
 
     $rootNode
+      ->fixXmlConfig('drushExtension')
       ->children()
+        ->arrayNode('drushExtensions')->addDefaultChildrenIfNoneSet(array())
+          ->useAttributeAsKey('name')
+          ->prototype('array')
+            ->children()
+              ->scalarNode('version')->defaultValue('')->end()
+            ->end()
+          ->end()
+        ->end()
         ->arrayNode('coreProjects')->addDefaultsIfNotSet(array())
           ->fixXmlConfig('project')
           ->children()

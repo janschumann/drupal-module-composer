@@ -128,7 +128,13 @@ class Composer {
     $enable = $disable = $uninstall = $download = array();
     foreach ($projects as $name => $project) {
       if ($fixVersion && (!$this->installedProjects->hasProject($name) || $project->getVersion() !== $this->installedProjects->getProject($name)->getVersion())) {
-        $download[] = $name . '-' . $project->getVersion();
+        $version = $project->getVersion();
+        if ("" === $version) {
+          $download[] = $name;
+        }
+        else {
+          $download[] = $name . '-' . $version;
+        }
       }
       foreach ($project->getModules() as $moduleName => $module) {
         if ($noInstallCheck || $this->installedProjects->hasModule($moduleName)) {

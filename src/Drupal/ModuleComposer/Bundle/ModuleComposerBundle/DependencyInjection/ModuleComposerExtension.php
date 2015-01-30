@@ -27,6 +27,12 @@ class ModuleComposerExtension extends Extension
     $configuration = $this->getConfiguration($configs, $container);
     $config = $this->processConfiguration($configuration, $configs);
 
+    $variables = array();
+    foreach ($config['variable'] as $variable) {
+      $variables[$variable['name']] = false !== strpos($variable['value'], "'") ? str_replace("'", '', $variable['value']) : $variable['value'];
+    }
+    $container->setParameter('mc.variables', $variables);
+
     foreach ($config['drushExtensions'] as $projectName => $project) {
       $this->buildProject($container, Project::TYPE_CONTRIB, $projectName, $project);
     }
@@ -53,13 +59,15 @@ class ModuleComposerExtension extends Extension
     $projectDefinition->addMethodCall('setType', array('module'));
     $projectDefinition->addMethodCall('setSubType', array($type));
     $container->setDefinition('mc.project.' . $projectName, $projectDefinition);
-    foreach ($project['modules'] as $moduleName => $module) {
-      $moduleDefinition = new DefinitionDecorator('mc.module');
-      $moduleDefinition->addMethodCall('setName', array($moduleName));
-      $moduleDefinition->addMethodCall('setState', array($module['state']));
-      $moduleDefinition->addMethodCall('setProject', array(new Reference('mc.project.' . $projectName)));
-      $container->setDefinition('mc.module.' . $moduleName, $moduleDefinition);
-      $projectDefinition->addMethodCall('addModule', array(new Reference('mc.module.' . $moduleName)));
+    if (array_key_exists('modules', $project)) {
+      foreach ($project['modules'] as $moduleName => $module) {
+        $moduleDefinition = new DefinitionDecorator('mc.module');
+        $moduleDefinition->addMethodCall('setName', array($moduleName));
+        $moduleDefinition->addMethodCall('setState', array($module['state']));
+        $moduleDefinition->addMethodCall('setProject', array(new Reference('mc.project.' . $projectName)));
+        $container->setDefinition('mc.module.' . $moduleName, $moduleDefinition);
+        $projectDefinition->addMethodCall('addModule', array(new Reference('mc.module.' . $moduleName)));
+      }
     }
 
     $projectDefinition->addTag('mc.configured_project');

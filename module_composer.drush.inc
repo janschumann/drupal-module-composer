@@ -14,10 +14,7 @@ function module_composer_drush_command() {
     'callback' => 'module_composer_compose',
     'description' => "Download, Enable, Disable, Uninstall modules by configuration.",
     'drupal dependencies' => array('dic'),
-	'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL,
-    'options' => array(
-      'cache' => 'Use cache for module download.',
-    ),
+	'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_FULL
   );
 
   $items['mc-dump-config'] = array(
@@ -59,16 +56,26 @@ function module_composer_compose() {
   // invoke necessary drush commands
   foreach (_module_composer_command_list() as $command => $rows) {
     $command = "pm-$command";
+    if ($command == "pm-download") {
+      drush_set_option("cache", true);
+    }
+
     foreach ($rows as $row) {
       _module_composer_dic()->get('mc.drush_bridge')->invoke($command, array($row));
     }
 
     // cache option is only valid for download so remove it after modules are downloaded
-    if ($command == "pm-download" && drush_get_option('cache')) {
-      drush_unset_option("cache");
-    }
+    drush_unset_option("cache");
   }
 
+  // set variables
+  if (_module_composer_dic()->hasParameter('mc.variables')) {
+    drush_set_option('exact', true);
+    foreach (_module_composer_dic()->getParameter('mc.variables') as $name => $value) {
+      _module_composer_dic()->get('mc.drush_bridge')->invoke('variable-set', array($name, (string) $value));
+    }
+    drush_unset_option('exact');
+  }
 }
 
 /**
@@ -121,7 +128,7 @@ function _module_composer_dic() {
   static $kernel;
 
   if (!isset($kernel)) {
-    $kernel = new \Drupal\ModuleComposer\Kernel('development', true, drupal_dic()->getParameter('kernel.root_dir'), drupal_dic()->getParameter('kernel.config_dir'));
+    $kernel = new \Drupal\ModuleComposer\Kernel(drupal_dic()->getParameter('kernel.environment'), drupal_dic()->getParameter('kernel.debug'), drupal_dic()->getParameter('kernel.root_dir'), drupal_dic()->getParameter('kernel.config_dir'));
     $kernel->boot();
   }
 

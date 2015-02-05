@@ -41,3 +41,7 @@ $ bin/drush mc-dump-config
 $ bin/drush mc-compose
 ```
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/janschumann/drupal-module-composer/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+

@@ -22,6 +22,15 @@ function module_composer_drush_command() {
 	'description' => "Dump current module configuration."
   );
 
+  $items['mc-dump-variables'] = array(
+    'callback' => 'module_composer_dump_variables',
+    'description' => "Dump current module configuration.",
+    'options' => array(
+      'filter' => "",
+      'only-changed' => false,
+    )
+  );
+
   return $items;
 }
 
@@ -79,6 +88,46 @@ function module_composer_compose() {
 }
 
 /**
+ * Command callback sp-dump-config
+ */
+function module_composer_dump_config() {
+  print _module_composer_dic()->get('mc.config_dumper')->dump();
+}
+
+/**
+ * Command callback dump variables
+ */
+function module_composer_dump_variables() {
+  $args = drush_get_arguments();
+
+  $filter = drush_get_option("filter", '');
+  $only_changed = drush_get_option("only-changed", false);
+  $defined_variables = _module_composer_dic()->getParameter('mc.variables');
+
+  $select = db_select('variable', 'v');
+  $select->fields('v');
+  if ('' !== $filter) {
+    $select->condition('name', $filter . '%', 'LIKE');
+  }
+  $result = $select->execute();
+
+  $variables = array();
+  foreach ($result as $variable) {
+    $value = unserialize($variable->value);
+    if (is_array($value)) {
+      drush_log('Only scalar values can be exported. Failed to export ' . $variable->name, 'warning');
+      continue;
+    }
+    if ($only_changed === false || (!array_key_exists($variable->name, $defined_variables) || $defined_variables[$variable->name] !== $value)) {
+      $variables[$variable->name] = $value;
+    }
+  }
+
+  print _module_composer_dic()->get('mc.variable_dumper')->dump($variables);
+}
+
+
+/**
  * @return array
  */
 function _module_composer_command_list() {
@@ -112,13 +161,6 @@ function _module_composer_prepare_commands(&$command_list) {
  */
 function drush_mc_dump_config_init() {
   _module_composer_init();
-}
-
-/**
- * Command callback sp-dump-config
- */
-function module_composer_dump_config() {
-  print _module_composer_dic()->get('mc.config_dumper')->dump();
 }
 
 /**

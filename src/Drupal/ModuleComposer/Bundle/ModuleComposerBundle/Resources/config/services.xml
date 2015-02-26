@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="mc.composer.class">Drupal\ModuleComposer\Composer</parameter>
         <parameter key="mc.config_dumper.class">Drupal\ModuleComposer\ConfigDumper</parameter>
+        <parameter key="mc.variable_dumper.class">Drupal\ModuleComposer\VariableDumper</parameter>
         <parameter key="mc.drush_bridge.class">Drupal\Bridge\DrushBridge</parameter>
         <parameter key="mc.project_registry.class">Drupal\ModuleComposer\Project\ProjectRegistry</parameter>
         <parameter key="mc.project_factory.class">Drupal\ModuleComposer\Project\ProjectFactory</parameter>
@@ -41,6 +42,8 @@
         <service id="mc.config_dumper" class="%mc.config_dumper.class%">
             <argument type="service" id="mc.composer" />
         </service>
+
+        <service id="mc.variable_dumper" class="%mc.variable_dumper.class%" />
 
         <service id="mc.configured_projects" class="%mc.project_registry.class%" />
 

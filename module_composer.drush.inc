@@ -62,6 +62,19 @@ function drush_mc_compose_init() {
  * Command callback sp-make
  */
 function module_composer_compose() {
+  // set variables
+  if (_module_composer_dic()->hasParameter('mc.variables')) {
+    drush_set_option('exact', true);
+    drush_set_option('format', 'json');
+    foreach (_module_composer_dic()->getParameter('mc.variables') as $name => $value) {
+      if (false !== strpos($name, 'file_')) {
+        _module_composer_dic()->get('mc.drush_bridge')->invoke('variable-set', array($name, json_encode((string) $value)));
+      }
+    }
+    drush_unset_option('exact');
+    drush_unset_option('format');
+  }
+
   // invoke necessary drush commands
   foreach (_module_composer_command_list() as $command => $rows) {
     $command = "pm-$command";
@@ -87,6 +100,7 @@ function module_composer_compose() {
     drush_unset_option('exact');
     drush_unset_option('format');
   }
+
 }
 
 /**

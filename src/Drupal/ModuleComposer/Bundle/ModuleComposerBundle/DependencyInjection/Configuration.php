@@ -20,6 +20,7 @@ class Configuration implements ConfigurationInterface {
     $rootNode
       ->fixXmlConfig('drushExtension')
       ->children()
+        ->scalarNode('order')->defaultValue('')->end()
         ->arrayNode('variable')
           ->prototype('array')
             ->children()

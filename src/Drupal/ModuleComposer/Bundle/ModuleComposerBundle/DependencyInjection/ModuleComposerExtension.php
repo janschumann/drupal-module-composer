@@ -50,6 +50,11 @@ class ModuleComposerExtension extends Extension
         $this->buildProject($container, $typeName, $projectName, $project);
       }
     }
+
+    if (isset($config['order']) && !empty($config['order'])) {
+      $order = explode(',', str_replace(' ', '', $config['order']));
+      $container->getDefinition('mc.composer')->addMethodCall('setOrder', array($order));
+    }
   }
 
   private function buildProject(ContainerBuilder $container, $type, $projectName, $project) {

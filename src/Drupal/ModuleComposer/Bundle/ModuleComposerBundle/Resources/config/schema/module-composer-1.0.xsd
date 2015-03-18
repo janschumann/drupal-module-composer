@@ -15,6 +15,7 @@
             <xsd:element name="customProjects" type="customProjects" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="variable" type="variable" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
+        <xsd:attribute name="order" default="composer,dev,custom" use="optional" />
     </xsd:complexType>
 
 

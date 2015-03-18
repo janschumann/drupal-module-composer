@@ -90,7 +90,7 @@ class Composer {
    * @param array $order
    */
   public function setOrder(array $order) {
-    $this->order = $order;
+    $this->customProjectsTypeOrder = $order;
   }
 
   /**

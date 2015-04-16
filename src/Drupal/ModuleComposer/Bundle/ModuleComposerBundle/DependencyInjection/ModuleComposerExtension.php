@@ -29,7 +29,7 @@ class ModuleComposerExtension extends Extension
 
     $variables = array();
     foreach ($config['variable'] as $variable) {
-      $variables[$variable['name']] = false !== strpos($variable['value'], "'") ? str_replace("'", '', $variable['value']) : $variable['value'];
+      $variables[$variable['name']] = !is_array($variable['value']) && false !== strpos($variable['value'], "'") ? str_replace("'", '', $variable['value']) : $variable['value'];
     }
     $container->setParameter('mc.variables', $variables);
 

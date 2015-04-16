@@ -68,7 +68,7 @@ function module_composer_compose() {
     drush_set_option('format', 'json');
     foreach (_module_composer_dic()->getParameter('mc.variables') as $name => $value) {
       if (false !== strpos($name, 'file_')) {
-        _module_composer_dic()->get('mc.drush_bridge')->invoke('variable-set', array($name, json_encode((string) $value)));
+        _module_composer_dic()->get('mc.drush_bridge')->invoke('variable-set', array($name, json_encode($value)));
       }
     }
     drush_unset_option('exact');
@@ -95,7 +95,7 @@ function module_composer_compose() {
     drush_set_option('exact', true);
     drush_set_option('format', 'json');
     foreach (_module_composer_dic()->getParameter('mc.variables') as $name => $value) {
-      _module_composer_dic()->get('mc.drush_bridge')->invoke('variable-set', array($name, json_encode((string) $value)));
+      _module_composer_dic()->get('mc.drush_bridge')->invoke('variable-set', array($name, json_encode($value)));
     }
     drush_unset_option('exact');
     drush_unset_option('format');

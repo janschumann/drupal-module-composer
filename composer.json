@@ -33,8 +33,8 @@
 
         "drush/drush": "~6.5",
 
-        "janschumann/dic": "~1.0@dev",
-        "janschumann/classloader_composer": "~1.0@dev",
+        "janschumann/dic": "~1.1.0",
+        "janschumann/classloader_composer": "~1.0.0",
 
         "symfony/config": "~2.4",
         "symfony/dependency-injection": "~2.4",
@@ -47,7 +47,7 @@
     },
 	"extra": {
 		"branch-alias": {
-			"dev-master": "1.0-dev"
+			"dev-master": "1.1-dev"
 		}
 	}
 }
